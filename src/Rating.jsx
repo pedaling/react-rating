@@ -156,9 +156,10 @@ var Rating = React.createClass({
     return Math.floor(index) + Math.floor(fraction * precision) / precision;
   },
   _fractionalIndex: function (event) {
+    var clientX = event.clientX || event.touches[0].clientX;
     var x = this.state.direction === 'rtl' ?
-      event.currentTarget.getBoundingClientRect().right - event.clientX :
-      event.clientX - event.currentTarget.getBoundingClientRect().left;
+      event.currentTarget.getBoundingClientRect().right - clientX :
+      clientX - event.currentTarget.getBoundingClientRect().left;
     return this._roundToFraction(x / event.currentTarget.offsetWidth);
   },
   render: function () {
@@ -187,15 +188,18 @@ var Rating = React.createClass({
       var percent = i - lastFullIndex === 0 ? index % 1 * 100 :
         i - lastFullIndex < 0 ? 100 : 0;
 
-      symbolNodes.push(<Symbol
+      symbolNodes.push((
+        <Symbol
           key={i}
           background={empty[i % empty.length]}
           icon={icon[i % icon.length]}
           percent={percent}
           onClick={!this.props.readonly && this.handleClick.bind(this, i)}
           onMouseMove={!this.props.readonly && this.handleMouseMove.bind(this, i)}
+          onTouchMove={!this.props.readonly && this.handleMouseMove.bind(this, i)}
           direction={this.state.direction}
-          />);
+        />
+      ));
     }
     var {
       start,

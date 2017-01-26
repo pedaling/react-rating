@@ -131,6 +131,12 @@ var Rating = React.createClass({
   },
   handleMouseMove: function (i, event) {
     var index = i + this._fractionalIndex(event);
+    if (index < this.props.step) {
+      index = this.props.step;
+    }
+    else if (index > this.props.stop) {
+      index = this.props.stop;
+    }
     if (this.state.indexOver !== index) {
       this.props.onRate(this._indexToRate(index));
       this.setState({
